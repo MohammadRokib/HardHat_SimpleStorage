@@ -279,7 +279,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 MohammadRokib - [Linkedin](https://www.linkedin.com/in/m0hammadrokib/) - mohammadrokibkhan@gmail.com
 
-Project Link: [https://github.com/MohammadRokib/HardHat_SimpleStoarage](https://github.com/MohammadRokib/HardHat_SimpleStoarage)
+Project Link: [https://github.com/MohammadRokib/HardHat_SimpleStoarage](https://github.com/MohammadRokib/HardHat_SimpleStorage)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
