@@ -1,0 +1,25 @@
+Create a project in the directory:
+    yarn init
+
+Adding HardHat to the project:
+    yarn add --dev hardhat
+
+Initializing hardhat:
+    yarn hardhat
+
+
+
+<!----- Acknowledgement links -----!>
+
+1. HardHat Tutorial: https://hardhat.org/tutorial
+2. Difference between dependencies & devDependencies: https://stackoverflow.com/questions/18875674
+3. Meaning of "@" prefix on npm packages: https://stackoverflow.com/questions/36667258
+
+
+
+
+add a .env file it will contain all the sensitive information which we don't want to share.
+
+.env:
+	GOERLI_RPC_URL = https://eth-goerli.g.alchemy.com/v2/qx9oS7VC6EMYtRC4bJNCrXgXPAle6cPq
+	
