@@ -62,7 +62,16 @@
     </li>
     <li><a href="#deploy-contract">Deploy Contract</a></li>
     <li><a href="#verify-contract">Verify Contract</a></li>
-    <li><a href="#interact-with-the-contract">Interact with the Contract</a></li>
+    <li>
+      <a href="#interact-with-the-contract">Interact with the Contract</a>
+      <ul>
+        <li><a href="#addperson-function">AddPerson function</a></li>
+        <li><a href="#people-list">People list</a></li>
+        <li><a href="#accessing-number">Accessing Number</a></li>
+        <li><a href="#store-function">Store function</a></li>
+        <li><a href="#retrieve-function">Retrieve function</a></li>
+      </ul>
+    </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -303,6 +312,49 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
 
 <!-- USAGE EXAMPLES -->
 ## Interact with the Contract
+
+After deploying the contract now I will interact with the contract from the deploy script.
+
+### AddPerson function
+
+To interact with the addPerson function type the below code after verifying the contract:
+```sh
+const addPersonResponse = await simpleStorage.addPerson("Jack", 989);
+await addPersonResponse.wait(1);
+```
+
+### People list
+
+To access the people list type the below code after addPerson function in deploy.js:
+```sh
+const list = await simpleStorage.list(0);
+console.log (`Name: ${list.name}`);
+console.log (`Number: ${list.num}`);
+```
+
+### Accessing Number
+
+To access the stored number directly type the below code after people list in deploy.js:
+```sh
+const numberResponse = await simpleStorage.number();
+console.log (`Stored number: ${numberResponse}`);
+```
+
+### Store function
+
+To access the store function type the below code after accessing number in deploy.js:
+```sh
+const storeResponse = await simpleStorage.store(9876);
+await storeResponse.wait(1);
+```
+
+### Retrieve function
+
+To access the retrieve function type the below code after store function in deploy.js:
+```sh
+const updatedValue = await simpleStorage.retrieve();
+console.log (`Updated value: ${updatedValue}`);
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
