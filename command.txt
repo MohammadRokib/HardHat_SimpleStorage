@@ -7,7 +7,7 @@ Adding HardHat to the project:
 Initializing hardhat:
     yarn hardhat
 
-
+https://youtu.be/gyMwXuJrbJQ?t=32796
 
 <!----- Acknowledgement links -----!>
 
@@ -18,8 +18,49 @@ Initializing hardhat:
 
 
 
-add a .env file it will contain all the sensitive information which we don't want to share.
+After deploying the contract it has to be verified. We can do that on Goerli Etherscan. Although a different method can be used to do that which is called programmatic verification. We can verify the contract programmatically. Which means, the contract can be verified with some code right after it is deployed.
 
-.env:
-	GOERLI_RPC_URL = https://eth-goerli.g.alchemy.com/v2/qx9oS7VC6EMYtRC4bJNCrXgXPAle6cPq
-	
+In order to do programmatic verification first I will ***import*** the ***etherscan plugin*** in ***hardhat.config.js***. Type this at the top:
+require("@nomiclabs/hardhat-etherscan");
+
+We need an API key from etherscan in order to do the programmatic verification. To do that first go to [etherscan.io]() and create an account. Log into your account. Then go to [API key](https://etherscan.io/myapikey) page. Then click `+ Add` button and create a new API key.
+
+Then add the API key in the .env file since it is an sensitive information. To do that type this in the .env file:
+ETHERSCAN_API_KEY = PMY3VUMX1N6D3UHT576XVJYSX7X4XCWYT1
+
+Then define the API KEY before module.exports where we have already defined the RPC URL and the PRIVATE KEY in hardhat.config.js:
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "key";
+
+Now to use the Etherscan API key in the code first create a new section named etherscan inside module.exports of hardhat.config.js:
+etherscan: {
+	apiKey: ETHERSCAN_API_KEY,
+}
+
+Now to verify the contract first import run from hardhat inside deploy.js:
+const { ethers, run } = require ("hardhat");
+
+Then add a `async fucntion verify` after `async function main` in deploy.js:
+async function verify(contractAddress, args) {
+    console.log("Verifying contract...");
+    try {
+        await run("verify:verify", {
+            address: contractAddress,
+            constructorArguments: args,
+        });
+    } catch (e) {
+        if (e.message.toLowerCase().includes("already verified")) {
+            console.log ("Already Verified");
+        } else {
+            console.log (e);
+        }
+    }
+}
+
+After doing all that now if we call the verify fucntion from the main function in deploy.js it will verify the contract. But we will only verify the contract if we are deploying it on a testnet. If the contract is deployed using hardhat network it can't be verified in etherscan. We can easily determine the network using chainID. Now type the following code inside ***async function main*** in deploy.js:
+if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
+    await simpleStorage.deployTransaction.wait(6);
+    await verify(simpleStoarge.address, []);
+}
+
+Lastly run deploy.js using the goerli network with the command:
+yarn hardhat run scripts/deploy.js --network goerli

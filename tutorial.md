@@ -60,7 +60,9 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#deploy-contract">Deploy Contract</a></li>
+    <li><a href="#verify-contract">Verify Contract</a></li>
+    <li><a href="#interact-with-the-contract">Interact with the Contract</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -140,13 +142,17 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
    ```sh
    yarn add --dev dotenv
    ```
+7. Adding etherscan from hardhat in order to use programatic verification:
+   ```sh
+   yarn add --dev @nomiclabs/hardhat-etherscan
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- USAGE EXAMPLES -->
-## Coding
+## Deploy Contract
 
 * Delete the default contract inside the contract folder of the project directory. And put this [SimpleStorage.sol](https://github.com/MohammadRokib/Solidity-HardHat/blob/main/Ether_SimpleStorage/SimpleStorage.sol) smart contract inside the contracts folder.
 * Now to compile the smart contract first make sure the solidity version in `SimpleStorage.sol` and in `module.exports` inside ***hardhat.config.js*** are the same. Then run the command:
@@ -234,6 +240,74 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
 
 
 
+<!-- USAGE EXAMPLES -->
+## Verify Contract
+
+* After deploying the contract, it has to be verified. We can do that on Goerli Etherscan. Although a different method can be used to do that, which is called programmatic verification. We can verify the contract programmatically. Which means, the contract can be verified with some codes right after it is deployed.
+* In order to do programmatic verification first I will ***import*** the ***etherscan plugin*** in ***hardhat.config.js***. To do that type this at the top:
+   ```sh
+   require("@nomiclabs/hardhat-etherscan");
+   ```
+* Next we need an API key from etherscan in order to do the programmatic verification through etherscan. To do that first go to [etherscan.io]() and create an account. Log into your account. Then got [API key](https://etherscan.io/myapikey) page. Then click `+ Add` button and create a new API key.
+* Since the API key is a sensitive information we shouldn't share it with anyone I will add it in the .env file. To do that type this in the .env file:
+   ```sh
+   ETHERSCAN_API_KEY = YOUR_ETHERSCAN_API_KEY
+   ```
+* Then define the API key before module.exports where we have already defined the RPC URL and the PRIVATE KEY in hardhat.config.js:
+   ```sh
+   const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "key";
+   ```
+* Now to use the Etherscan API key in the code first create a new section named ***etherscan*** inside ***module.exports*** in ***hardhat.config.js***:
+   ```sh
+   etherscan: {
+       apiKey: ETHERSCAN_API_KEY,
+   },
+   ```
+* Now to verify the contract first import ***run*** from hardhat inside ***deploy.js***:
+   ```sh
+   const { ethers, run } = require ("hardhat");
+   ```
+* Then add `async function verify` after `async function main` in deploy.js:
+   ```sh
+   async function verify (contractAddress, args) {
+       console.log ("Verifying contract...");
+       try {
+           await run ("verify:verify", {
+               address: contractAddress,
+               constructorArguments: args,
+           });
+       } catch (e) {
+           if (e.message.toLowerCase().includes("already verified")) {
+               console.log ("Already verified");
+           } else {
+               console.log (e);
+           }
+       }
+   }
+   ```
+* After doing these now if we ***call the verify function*** ***from the main function*** in deploy.js, it will verify the contract. The verification will only work if it is deployed on a testnet. If the contract is deployed on the hardhat network it can't be verified in etherscan. We can easily determine the network on which the contract is deployed using chainID. Type the following inside ***async function main*** in deploy.js to verify the contract:
+   ```sh
+   if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
+       await simpleStorage.deployTransaction.wait(6);
+       await verify (simpleStorage.address, []);
+   }
+   ```
+* Lastly run deploy.js using the goerli network with the command:
+   ```sh
+   yarn hardhat run scripts/deploy.js --network goerli
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- USAGE EXAMPLES -->
+## Interact with the Contract
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
 <!-- ROADMAP -->
 ## Roadmap
 
@@ -241,7 +315,7 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
 - [ ] Users can store a name and a number.
     - [ ] Users can search the number with the name.
 
-See the [open issues](https://github.com/MohammadRokib/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/MohammadRokib/HardHat_SimpleStorage/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -293,6 +367,7 @@ Project Link: [https://github.com/MohammadRokib/HardHat_SimpleStorage](https://g
 * [Meaning of "@" prefix on npm packages](https://stackoverflow.com/questions/36667258)
 * [How does Hardhat network works](https://hardhat.org/hardhat-network/docs/overview)
 * [ChainList](https://chainlist.org/)
+* [HardHat-Verify](https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat-verify)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
