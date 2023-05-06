@@ -163,7 +163,7 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
 <!-- USAGE EXAMPLES -->
 ## Deploy Contract
 
-* Delete the default contract inside the contract folder of the project directory. And put this [SimpleStorage.sol](https://github.com/MohammadRokib/Solidity-HardHat/blob/main/Ether_SimpleStorage/SimpleStorage.sol) smart contract inside the contracts folder.
+* Delete the default contract inside the contract folder of the project directory. And put this [SimpleStorage.sol](https://github.com/MohammadRokib/HardHat_SimpleStorage/blob/main/contracts/SimpleStorage.sol) smart contract inside the contracts folder.
 * Now to compile the smart contract first make sure the solidity version in `SimpleStorage.sol` and in `module.exports` inside ***hardhat.config.js*** are the same. Then run the command:
    ```sh
    yarn hardhat compile
