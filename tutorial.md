@@ -169,7 +169,7 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
    yarn hardhat compile
    ```
 * After compiling the contract now I will write the deploy script so that I can deploy the smart contract. Delete everything inside the scripts folder of the project directory and create a new file named `deploy.js` and paste the below code:
-   ```sh
+   ```js
    // imports
 
    // async main
@@ -183,18 +183,18 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
        });
    ```
 * Then import ethers from hardhat. Type this in the imports section of deploy.js:
-   ```sh
+   ```js
    const { ethers } = require ("hardhat");
    ```
 * Now to get the contract factory of SimpleStorage.sol type this inside async main:
-   ```sh
+   ```js
    // async main
    async function main() {
        const SimpleStorageFactory = await ehters.getContractFactory("SimpleStorage");
    }
    ```
 * After that to deploy the contract, type the followings after SimpleStorageFactory inside async main of deploy.js:
-   ```sh
+   ```js
    const simpleStorage = await SimpleStorageFactory.deploy();
    await simpleStorage.deployed();
 
@@ -209,21 +209,21 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
     * RPC URL: It will define the network we want work on. We can get an RPC URL from Alchemy. [See how]()
     * Private Key: It will act as an account on the network we are using. We can get a private key from metamask. [See how]()
 * Add a `.env` file in the project directory. It will contain all the sensitive information which we don't want to share. Such as: RPC_URL, PRIVATE_KEY, API_KEY etc. Add the following in the ***.env*** file:
-   ```sh
+   ```js
    GOERLI_RPC_URL = YOUR_RPC_URL_FROM_ALCHEMY
    PRIVATE_KEY = YOUR_PRIVATE_KEY_FROM_METAMASK
    ```
 * Now to deploy the contract from Goerli Testnet first import ***.env*** in `hardhat.config.js` type this at the top:
-   ```sh
+   ```js
    require("dotenv").config();
    ```
 * After that first call the RPC URL and the PRIVATE KEY from the .env file and store them in variables like this after all the imports:
-   ```sh
+   ```js
    const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || "https://eth-goerli";
    const PRIVATE_KEY = process.env.PRIVATE_KEY || "0xkey";
    ```
 * Then add the following after ***solidity: 0.8.7;*** inside ***module.exports*** in ***hardhat.config.js***:
-   ```sh
+   ```js
    networks: {
        goerli: {
            url: GOERLI_RPC_URL,
@@ -254,30 +254,30 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
 
 * After deploying the contract, it has to be verified. We can do that on Goerli Etherscan. Although a different method can be used to do that, which is called programmatic verification. We can verify the contract programmatically. Which means, the contract can be verified with some codes right after it is deployed.
 * In order to do programmatic verification first I will ***import*** the ***etherscan plugin*** in ***hardhat.config.js***. To do that type this at the top:
-   ```sh
+   ```js
    require("@nomiclabs/hardhat-etherscan");
    ```
 * Next we need an API key from etherscan in order to do the programmatic verification through etherscan. To do that first go to [etherscan.io]() and create an account. Log into your account. Then got [API key](https://etherscan.io/myapikey) page. Then click `+ Add` button and create a new API key.
 * Since the API key is a sensitive information we shouldn't share it with anyone I will add it in the .env file. To do that type this in the .env file:
-   ```sh
+   ```js
    ETHERSCAN_API_KEY = YOUR_ETHERSCAN_API_KEY
    ```
 * Then define the API key before module.exports where we have already defined the RPC URL and the PRIVATE KEY in hardhat.config.js:
-   ```sh
+   ```js
    const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "key";
    ```
 * Now to use the Etherscan API key in the code first create a new section named ***etherscan*** inside ***module.exports*** in ***hardhat.config.js***:
-   ```sh
+   ```js
    etherscan: {
        apiKey: ETHERSCAN_API_KEY,
    },
    ```
 * Now to verify the contract first import ***run*** from hardhat inside ***deploy.js***:
-   ```sh
+   ```js
    const { ethers, run } = require ("hardhat");
    ```
 * Then add `async function verify` after `async function main` in deploy.js:
-   ```sh
+   ```js
    async function verify (contractAddress, args) {
        console.log ("Verifying contract...");
        try {
@@ -295,7 +295,7 @@ In this project I will write the SimpleStorage.sol smart contract using ***ether
    }
    ```
 * After doing these now if we ***call the verify function*** ***from the main function*** in deploy.js, it will verify the contract. The verification will only work if it is deployed on a testnet. If the contract is deployed on the hardhat network it can't be verified in etherscan. We can easily determine the network on which the contract is deployed using chainID. Type the following inside ***async function main*** in deploy.js to verify the contract:
-   ```sh
+   ```js
    if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
        await simpleStorage.deployTransaction.wait(6);
        await verify (simpleStorage.address, []);
@@ -318,7 +318,7 @@ After deploying the contract now I will interact with the contract from the depl
 ### AddPerson function
 
 To interact with the addPerson function type the below code after verifying the contract:
-```sh
+```js
 const addPersonResponse = await simpleStorage.addPerson("Jack", 989);
 await addPersonResponse.wait(1);
 ```
@@ -326,7 +326,7 @@ await addPersonResponse.wait(1);
 ### People list
 
 To access the people list type the below code after addPerson function in deploy.js:
-```sh
+```js
 const list = await simpleStorage.list(0);
 console.log (`Name: ${list.name}`);
 console.log (`Number: ${list.num}`);
@@ -335,7 +335,7 @@ console.log (`Number: ${list.num}`);
 ### Accessing Number
 
 To access the stored number directly type the below code after people list in deploy.js:
-```sh
+```js
 const numberResponse = await simpleStorage.number();
 console.log (`Stored number: ${numberResponse}`);
 ```
@@ -343,7 +343,7 @@ console.log (`Stored number: ${numberResponse}`);
 ### Store function
 
 To access the store function type the below code after accessing number in deploy.js:
-```sh
+```js
 const storeResponse = await simpleStorage.store(9876);
 await storeResponse.wait(1);
 ```
@@ -351,7 +351,7 @@ await storeResponse.wait(1);
 ### Retrieve function
 
 To access the retrieve function type the below code after store function in deploy.js:
-```sh
+```js
 const updatedValue = await simpleStorage.retrieve();
 console.log (`Updated value: ${updatedValue}`);
 ```
