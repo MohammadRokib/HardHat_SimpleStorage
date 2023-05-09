@@ -420,6 +420,12 @@ Project Link: [https://github.com/MohammadRokib/HardHat_SimpleStorage](https://g
 * [How does Hardhat network works](https://hardhat.org/hardhat-network/docs/overview)
 * [ChainList](https://chainlist.org/)
 * [HardHat-Verify](https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat-verify)
+* [Hardhat-tasks](https://hardhat.org/hardhat-runner/docs/advanced/create-task)
+* [Rekt](https://rekt.news/leaderboard/)
+* [Mocha](https://mochajs.org/)
+* [Testing-by-example](https://remix-ide.readthedocs.io/en/latest/unittesting_examples.html)
+* [Hardhat-gas-reporter](https://www.npmjs.com/package/hardhat-gas-reporter?activeTab=readme)
+* [Solidity-coverage](https://github.com/sc-forks/solidity-coverage)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
